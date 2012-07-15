@@ -134,6 +134,7 @@ module ZendeskAPI
     # @param [Boolean] reload Whether to disregard cache
     def fetch(reload = false)
       return @resources if @resources && (!@fetchable || !reload)
+
       if association && association.options.parent && association.options.parent.new_record?
         return @resources = []
       end
@@ -256,13 +257,17 @@ module ZendeskAPI
       end
     end
 
-    alias :orig_to_s :to_s
     def to_s
       if @resources
         @resources.inspect
       else
-        orig_to_s
+        inspect = []
+        inspect << "options=#{@options.inspect}" if @options.any?
+        inspect << "path=#{path}"
+        "#{@resource.singular} collection [#{inspect.join(",")}]"
       end
     end
+
+    alias :to_str :to_s
   end
 end

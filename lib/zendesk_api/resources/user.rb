@@ -1,8 +1,13 @@
 require 'zendesk_api/resources/forum'
 
 module ZendeskAPI
-  class CRMData < DataResource; end
-  class CRMDataStatus < DataResource; end
+  class CrmData < DataResource
+    class << self
+      alias :resource_name :singular_resource_name
+    end
+  end
+
+  class CrmDataStatus < DataResource; end
   class CustomRole < DataResource; end
 
   class GroupMembership < Resource
@@ -27,8 +32,8 @@ module ZendeskAPI
     has_many :group_memberships
     has_many :topics
 
-    has_many :forum_subscriptions, :class => "forum/forum_subscription"
-    has_many :topic_subscriptions, :class => "topic/topic_subscription"
+    has_many :forum_subscriptions, :class => "forum_subscription"
+    has_many :topic_subscriptions, :class => "topic_subscription"
     has_many :topic_comments, :class => "topic/topic_comment"
     has_many :topic_votes, :class => "topic/vote"
 
