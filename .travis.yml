@@ -6,3 +6,4 @@ rvm:
 branches:
   except:
     - zendesk_console
+script: "bundle exec rake spec:live"
