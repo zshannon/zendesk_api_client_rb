@@ -160,7 +160,13 @@ module ZendeskAPI
       elsif @prev_page =~ /page=(\d+)/
         @options["page"] = $1.to_i + 1
       end
-
+      
+      if @options[:per_page]
+        metaclass = class << @resources; self; end
+        metaclass.send :attr_accessor, :total_pages, :current_page
+        @resources.total_pages = 1 + (@count / @options[:per_page])
+        @resources.current_page = @options["page"]
+      end
       @resources
     end
 
