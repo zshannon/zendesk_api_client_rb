@@ -72,7 +72,20 @@ module ZendeskAPI
 
       new(client, response.body[singular_resource_name])
     end
+    
+    def search(client, options = {})
+      @client = client # so we can use client.logger in rescue
 
+      #raise "No :id given" unless options[:id] || options["id"]
+      association = options.delete(:association) || Association.new(:class => self)
+
+      response = client.connection.get(association.generate_path(options)) do |req|
+        req.params = options
+      end
+
+      new(client, response.body[singular_resource_name])
+    end
+    
     rescue_client_error :find
   end
 
